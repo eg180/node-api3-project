@@ -39,26 +39,55 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const { changes } = req.body;
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  Users.update(id, changes)
+  .then(user => {
+    res.status(200).json(user)
+  })
+  .catch(err => {
+    res.status(401).json(err.error)
+  })
 });
 
 router.delete('/:id', (req, res) => {
   // RETURN THE FRESHLY DELETED USER OBJECT
   // this needs a middleware to verify user id
+  const { id } = req.params;
+
+  Users.remove(id)
+  .then(user => {
+    res.status(200).json(user)
+  })
+  .catch(err => {
+    res.status(401).json(err.error)
+  })
+  
 });
 
 router.get('/:id/posts', (req, res) => {
   // RETURN THE ARRAY OF USER POSTS
   // this needs a middleware to verify user id
+  const { id } = req.params;
+  Users.getUserPosts(id)
+  .then(posts => {
+    res.status(200).json(posts)
+  })
+  .catch(err => {
+    res.status(401).json(err.error)
+  })
 });
 
-router.post('/:id/posts', (req, res) => {
-  // RETURN THE NEWLY CREATED USER POST
-  // this needs a middleware to verify user id
-  // and another middleware to check that the request body is valid
-});
+// router.post('/:id/posts', (req, res) => {
+//   const { id } = req.body;
+//   const {}
+//   // RETURN THE NEWLY CREATED USER POST
+//   // this needs a middleware to verify user id
+//   // and another middleware to check that the request body is valid
+// });
 
 // do not forget to export the router
 module.exports = router;
